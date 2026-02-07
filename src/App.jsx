@@ -24,7 +24,7 @@ const App = () => {
           <Routes>
             <Route path='/' element={<Home notes={notes} setNotes={setNotes}/>}/>
             <Route path='/archive' element={<Archive/>}/>
-            <Route path='/trash' element={<Trash/>}/>
+            <Route path='/trash' element={<Trash  notes={notes} setNotes={setNotes}/>}/>
           </Routes>
         </BrowserRouter>
     </div>
