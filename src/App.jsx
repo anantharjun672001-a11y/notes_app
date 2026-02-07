@@ -23,7 +23,7 @@ const App = () => {
         <BrowserRouter>
           <Routes>
             <Route path='/' element={<Home notes={notes} setNotes={setNotes}/>}/>
-            <Route path='/archive' element={<Archive/>}/>
+            <Route path='/archive' element={<Archive  notes={notes} setNotes={setNotes}/>}/>
             <Route path='/trash' element={<Trash  notes={notes} setNotes={setNotes}/>}/>
           </Routes>
         </BrowserRouter>
