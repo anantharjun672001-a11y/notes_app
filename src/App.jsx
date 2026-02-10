@@ -1,33 +1,31 @@
-import React, { useEffect, useState } from 'react';
-import { BrowserRouter,  Route,  Routes } from 'react-router-dom';
-import Home from './pages/Home';
-import Archive from './pages/Archive';
-import Trash from './pages/Trash';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { useEffect, useState } from "react";
+import Home from "./pages/Home";
+import Archive from "./pages/Archive";
+import Trash from "./pages/Trash";
+import Pinned from "./pages/Pinned";
 
 const App = () => {
-  const [notes,setNotes]=useState([]);
+  const [notes, setNotes] = useState([]);
 
-  useEffect(()=>{
-    const storedNotes = localStorage.getItem("notes");
-    if(storedNotes){
-      setNotes(JSON.parse(storedNotes));
-    }
-  },[])
+  useEffect(() => {
+    const stored = localStorage.getItem("notes");
+    if (stored) setNotes(JSON.parse(stored));
+  }, []);
 
-  useEffect(()=>{
-    localStorage.setItem("notes",JSON.stringify(notes));
-  },[notes])
+  useEffect(() => {
+    localStorage.setItem("notes", JSON.stringify(notes));
+  }, [notes]);
 
   return (
-    <div>
-        <BrowserRouter>
-          <Routes>
-            <Route path='/' element={<Home notes={notes} setNotes={setNotes}/>}/>
-            <Route path='/archive' element={<Archive  notes={notes} setNotes={setNotes}/>}/>
-            <Route path='/trash' element={<Trash  notes={notes} setNotes={setNotes}/>}/>
-          </Routes>
-        </BrowserRouter>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home notes={notes} setNotes={setNotes} />} />
+        <Route path="/pinned" element={<Pinned notes={notes} setNotes={setNotes} />} />
+        <Route path="/archive" element={<Archive notes={notes} setNotes={setNotes} />} />
+        <Route path="/trash" element={<Trash notes={notes} setNotes={setNotes} />} />
+      </Routes>
+    </BrowserRouter>
   );
 };
 
