@@ -1,6 +1,6 @@
 import React from 'react';
 
-const TagFilter = () => {
+const Pinned = () => {
     return (
         <div>
             
@@ -8,4 +8,4 @@ const TagFilter = () => {
     );
 };
 
-export default TagFilter;
+export default Pinned;

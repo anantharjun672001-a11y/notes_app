@@ -1,93 +1,71 @@
-import React, { useState } from 'react';
-import NoteForm from "../components/NoteForm"
+import React, { useState } from "react";
+import NoteForm from "../components/NoteForm";
+import NoteCard from "../components/NoteCard";
+import SearchBar from "../components/SearchBar";
+import TagFilter from "../components/TagFilter";
 
-const Home = ({notes,setNotes}) => {
-    const[search,setSearch] = useState("");
-    const[selectedTag,setSelectedTag] = useState("");
+const Home = ({ notes, setNotes }) => {
+  const [search, setSearch] = useState("");
+  const [selectedTag, setSelectedTag] = useState("");
 
-    const handlePin=(id)=>{
-        setNotes(prevNotes=>
-            prevNotes.map(note=>
-                note.id === id ? {...note,pinned : !note.pinned} : note
-            )
-        )
-    }
-
-    const handleArchive =(id) =>{
-        setNotes(prevNotes=>
-            prevNotes.map(note=>
-                note.id === id ? {...note, archived : true ,pinned:false} : note
-            )
-        )
-    }
-
-    const handleTrash = (id)=>{
-        setNotes(prevNotes=>
-            prevNotes.map(note=>
-                note.id === id ? {...note ,trashed:true} : note
-            )
-        )
-    }
-
-    return (
-        <div>
-            <h1>Home</h1>
-            <input
-                type='text'
-                placeholder='Search here..'
-                value={search}
-                onChange={(e)=>setSearch(e.target.value)}
-            />
-
-            <NoteForm  setNotes={setNotes}/>
-
-            {notes
-             .filter(note => !note.archived && !note.trashed)
-             .filter(note => !selectedTag || note.tags ?.includes(selectedTag))
-             .filter(note =>
-                note.title.toLowerCase().includes(search.toLowerCase()) ||
-                note.description.toLowerCase().includes(search.toLowerCase())
-             )
-             .slice()
-             .sort((a, b) => b.pinned - a.pinned)
-             .map((note)=>{
-                return(
-                    <div key={note.id}>
-                        <p>{note.title}</p>
-                        <p>{note.description}</p>
-                         <div>
-                            {note.tags?.map(tag => (
-                            <button
-                                key={tag}
-                                onClick={() => setSelectedTag(tag)}
-                            >
-                                #{tag}
-                            </button>
-                            ))}
-                        </div>
-                        <button onClick={()=>handlePin(note.id)}>
-                            {note.pinned ? "Unpin" : "Pin"}
-                        </button>
-                        <button onClick={()=>handleArchive(note.id)}>
-                            Archive
-                        </button>
-                        <button onClick={()=>handleTrash(note.id)}>
-                            Delete
-                        </button>
-                        {selectedTag && (
-                        <button onClick={() => setSelectedTag("")}>
-                            Clear Tag Filter
-                        </button>
-                        )}
-                    </div>
-                )
-            })
-    
-            }
-            
-           
-        </div>
+  const handlePin = (id) => {
+    setNotes(prev =>
+      prev.map(n =>
+        n.id === id ? { ...n, pinned: !n.pinned } : n
+      )
     );
+  };
+
+  const handleArchive = (id) => {
+    setNotes(prev =>
+      prev.map(n =>
+        n.id === id ? { ...n, archived: true, pinned: false } : n
+      )
+    );
+  };
+
+  const handleTrash = (id) => {
+    setNotes(prev =>
+      prev.map(n =>
+        n.id === id ? { ...n, trashed: true } : n
+      )
+    );
+  };
+
+  const filteredNotes = notes
+    .filter(n => !n.archived && !n.trashed)
+    .filter(n => !selectedTag || n.tags?.includes(selectedTag))
+    .filter(n =>
+      n.title.toLowerCase().includes(search.toLowerCase()) ||
+      n.description.toLowerCase().includes(search.toLowerCase())
+    )
+    .sort((a, b) => b.pinned - a.pinned);
+
+  return (
+    <div className="container">
+      <h1>Notes</h1>
+
+      <SearchBar search={search} setSearch={setSearch} />
+      <NoteForm setNotes={setNotes} />
+      <TagFilter
+        selectedTag={selectedTag}
+        clearTag={() => setSelectedTag("")}
+      />
+
+      <div className="notes-grid">
+        {filteredNotes.map(note => (
+          <NoteCard
+            key={note.id}
+            note={note}
+            onPin={handlePin}
+            onArchive={handleArchive}
+            onTrash={handleTrash}
+            onTagClick={setSelectedTag}
+          />
+        ))}
+      </div>
+    </div>
+  );
 };
 
 export default Home;
