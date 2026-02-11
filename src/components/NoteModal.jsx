@@ -18,7 +18,7 @@ const NoteModal = ({ note, onAdd, onUpdate, onClose }) => {
   }, [note]);
 
   const handleSave = () => {
-    if (!title) return;
+    if (!title.trim()) return;
 
     const data = {
       ...(note || {}),
@@ -36,17 +36,68 @@ const NoteModal = ({ note, onAdd, onUpdate, onClose }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/30 flex items-center justify-center">
-      <div className="bg-white p-6 rounded-xl w-[400px]">
-        <h2 className="font-semibold mb-3">
+    <div className="fixed inset-0 bg-black/40 flex items-center justify-center">
+      <div className="bg-white p-6 rounded-xl w-[400px] shadow-xl space-y-4">
+
+        <h2 className="text-lg font-semibold">
           {note ? "Edit Note" : "Create Note"}
         </h2>
 
-        <input value={title} onChange={e => setTitle(e.target.value)} />
-        <textarea value={desc} onChange={e => setDesc(e.target.value)} />
-        <input value={tags} onChange={e => setTags(e.target.value)} />
+        {/* TITLE */}
+        <div>
+          <label className="block text-sm mb-1 font-medium">
+            Title
+          </label>
+          <input
+            className="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+            placeholder="Enter note title"
+            value={title}
+            onChange={e => setTitle(e.target.value)}
+          />
+        </div>
 
-        <button onClick={handleSave}>Save</button>
+        {/* DESCRIPTION */}
+        <div>
+          <label className="block text-sm mb-1 font-medium">
+            Description
+          </label>
+          <textarea
+            className="w-full border rounded px-3 py-2 h-24 resize-none focus:outline-none focus:ring-2 focus:ring-blue-400"
+            placeholder="Write your note..."
+            value={desc}
+            onChange={e => setDesc(e.target.value)}
+          />
+        </div>
+
+        {/* TAGS */}
+        <div>
+          <label className="block text-sm mb-1 font-medium">
+            Tags
+          </label>
+          <input
+            className="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+            placeholder="Add tags (comma separated)"
+            value={tags}
+            onChange={e => setTags(e.target.value)}
+          />
+        </div>
+
+        {/* BUTTONS */}
+        <div className="flex justify-end gap-3 pt-2">
+          <button
+            onClick={onClose}
+            className="px-4 py-2 rounded border"
+          >
+            Cancel
+          </button>
+
+          <button
+            onClick={handleSave}
+            className="px-4 py-2 rounded bg-blue-600 text-white"
+          >
+            {note ? "Update" : "Add"}
+          </button>
+        </div>
       </div>
     </div>
   );
